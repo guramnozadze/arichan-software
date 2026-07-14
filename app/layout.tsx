@@ -22,10 +22,31 @@ const plexMono = IBM_Plex_Mono({
   display: "swap",
 });
 
+const siteTitle = "Arichan Software - Guram Nozadze";
+const siteDescription =
+  "Independent software studio by Guram Nozadze. Marketplaces, AI tools and SaaS - designed, built and shipped.";
+
 export const metadata: Metadata = {
-  title: "Arichan Software - Guram Nozadze",
-  description:
-    "Independent software studio by Guram Nozadze. Marketplaces, AI tools and SaaS - designed, built and shipped.",
+  metadataBase: new URL(
+    process.env.VERCEL_PROJECT_PRODUCTION_URL
+      ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+      : "http://localhost:3000",
+  ),
+  title: siteTitle,
+  description: siteDescription,
+  openGraph: {
+    title: siteTitle,
+    description: siteDescription,
+    url: "/",
+    siteName: "Arichan Software",
+    type: "website",
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: siteTitle,
+    description: siteDescription,
+  },
 };
 
 export const viewport: Viewport = {
