@@ -90,7 +90,7 @@ export default function Hero() {
 
         <div className="absolute inset-0 z-10 flex flex-col items-center justify-center select-none">
           <h1
-            className="display text-[clamp(5rem,17vw,16rem)] text-cream text-center"
+            className="hero-title display text-[clamp(5rem,17vw,16rem)] text-center"
             aria-label="Arichan Software"
           >
             {LINES.map((line, li) => (

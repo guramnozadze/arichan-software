@@ -84,6 +84,24 @@ html.lenis body {
 
 /* ---------- hero ---------- */
 
+.hero-title {
+  color: var(--color-orchid);
+}
+
+/* Gradient lives on the letter spans: background-clip on the h1 breaks
+   once GSAP puts transforms on the animated descendants. */
+.hero-title .hero-letter {
+  background: linear-gradient(
+    172deg,
+    #d4aaff 0%,
+    var(--color-orchid) 38%,
+    var(--color-violet-core) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
 .hero-letter {
   display: inline-block;
   will-change: transform;
