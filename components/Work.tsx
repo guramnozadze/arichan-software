@@ -1,6 +1,6 @@
 "use client";
 
-import { useLayoutEffect, useRef } from "react";
+import { useLayoutEffect, useRef, type CSSProperties } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -10,28 +10,31 @@ const PROJECTS = [
   {
     index: "01",
     name: "PlusConverter",
-    tags: "Marketplace · Payments",
+    tag: "P2P Marketplace",
     pitch:
-      "Georgia's P2P exchange for PLUS points - 748,882 points moved to lari.",
+      "Georgia's peer-to-peer exchange for PLUS points - 748,882 points moved to lari.",
     href: "https://plusconverter.ge",
     domain: "plusconverter.ge",
+    accent: "#8b30e0",
   },
   {
     index: "02",
     name: "AImly",
-    tags: "SaaS · AI",
+    tag: "X Growth Manager",
     pitch:
-      "An AI copilot that grows your X audience - it watches, drafts, you approve.",
+      "An X manager built to outgrow the competition: trend radar, autopilot drafts, your approval.",
     href: "https://tryaimly.com",
     domain: "tryaimly.com",
+    accent: "#1fc77f",
   },
   {
     index: "03",
     name: "AdLift",
-    tags: "Web App · Ads",
-    pitch: "A lightweight toolkit for lifting ad campaign performance.",
+    tag: "Facebook Ads Manager",
+    pitch: "Facebook campaigns, creatives and results in one clean dashboard.",
     href: "https://adlift.vercel.app",
     domain: "adlift.vercel.app",
+    accent: "#3f8efc",
   },
 ];
 
@@ -76,14 +79,15 @@ export default function Work() {
             target="_blank"
             rel="noreferrer"
             className="work-row border-b border-cream/10"
+            style={{ "--row-accent": project.accent } as CSSProperties}
           >
             <div className="mx-auto grid max-w-7xl grid-cols-[auto_1fr_auto] items-center gap-x-6 sm:gap-x-12 px-6 py-10 sm:px-10 sm:py-14">
               <span className="work-dim work-swap font-mono text-sm text-stone self-start pt-2">
                 {project.index}
               </span>
               <span className="block">
-                <span className="work-dim work-swap block font-mono text-[0.6875rem] tracking-[0.22em] uppercase text-orchid">
-                  {project.tags}
+                <span className="work-tag work-swap block font-mono text-[0.6875rem] tracking-[0.22em] uppercase">
+                  {project.tag}
                 </span>
                 <span className="work-name work-swap display block mt-2 text-[clamp(2.5rem,7vw,6.5rem)] text-cream">
                   {project.name}
@@ -93,9 +97,7 @@ export default function Work() {
                 </span>
               </span>
               <span className="justify-self-end text-right">
-                <span className="work-arrow block text-3xl sm:text-4xl text-orchid">
-                  ↗
-                </span>
+                <span className="work-arrow block text-3xl sm:text-4xl">↗</span>
                 <span className="work-dim work-swap mt-2 hidden sm:block font-mono text-xs text-stone">
                   {project.domain}
                 </span>

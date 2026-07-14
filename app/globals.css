@@ -105,6 +105,31 @@ html.lenis body {
   100% { transform: scaleY(0); transform-origin: bottom; }
 }
 
+/* ---------- marquee ---------- */
+
+.marquee {
+  overflow: hidden;
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee-scroll 36s linear infinite;
+  will-change: transform;
+}
+
+@keyframes marquee-scroll {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* ---------- manifesto ---------- */
+
+.mani-word {
+  opacity: 0.15;
+}
+
 /* ---------- work rows ---------- */
 
 .work-row {
@@ -118,10 +143,23 @@ html.lenis body {
   position: absolute;
   inset: 0;
   z-index: -1;
-  background: var(--color-violet-core);
+  background: var(--row-accent, var(--color-violet-core));
   transform: scaleY(0);
   transform-origin: bottom;
   transition: transform 0.5s cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+.work-tag {
+  color: var(--row-accent, var(--color-orchid));
+}
+
+.work-arrow {
+  color: var(--row-accent, var(--color-orchid));
+}
+
+.work-row:hover .work-tag,
+.work-row:focus-visible .work-tag {
+  color: rgb(10 9 13 / 0.8);
 }
 
 .work-row:hover::before,
@@ -192,20 +230,22 @@ html.lenis body {
 /* ---------- reduced motion ---------- */
 
 @media (prefers-reduced-motion: reduce) {
-  .pillars-track {
-    height: auto !important;
+  .marquee-track {
+    animation: none;
   }
 
-  .pillars-stage {
-    position: relative !important;
-    height: auto !important;
-  }
-
-  .pillar-panel {
-    position: relative !important;
+  .mani-word {
     opacity: 1 !important;
-    transform: none !important;
-    margin-bottom: 4rem;
+  }
+
+  .mani-track {
+    height: auto !important;
+  }
+
+  .mani-stage {
+    position: relative !important;
+    height: auto !important;
+    padding: 8rem 0;
   }
 
   .hero-track {

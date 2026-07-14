@@ -1,9 +1,9 @@
 import Finale from "@/components/Finale";
 import Hero from "@/components/Hero";
+import Manifesto from "@/components/Manifesto";
+import Marquee from "@/components/Marquee";
 import Nav from "@/components/Nav";
-import Pillars from "@/components/Pillars";
 import SmoothScroll from "@/components/SmoothScroll";
-import Stats from "@/components/Stats";
 import Work from "@/components/Work";
 
 export default function Home() {
@@ -14,8 +14,8 @@ export default function Home() {
         <Hero />
         {/* Curtain: slides up over the pinned hero as it recedes */}
         <div className="relative z-10 -mt-[100vh] bg-ink">
-          <Stats />
-          <Pillars />
+          <Marquee />
+          <Manifesto />
           <Work />
           <Finale />
         </div>

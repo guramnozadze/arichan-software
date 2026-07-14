@@ -81,7 +81,7 @@ export default function Hero() {
       aria-label="Arichan Software"
     >
       <div className="hero-stage sticky top-0 h-screen overflow-hidden">
-        <p className="hero-eyebrow eyebrow absolute top-20 left-1/2 -translate-x-1/2 z-20 text-center whitespace-nowrap">
+        <p className="hero-eyebrow eyebrow absolute top-16 sm:top-20 left-0 z-20 w-full px-6 text-center">
           Guram Nozadze · Independent Software Studio
         </p>
 

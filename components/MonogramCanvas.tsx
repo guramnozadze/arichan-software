@@ -1,6 +1,6 @@
 "use client";
 
-import { Canvas, useFrame } from "@react-three/fiber";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Environment, Lightformer } from "@react-three/drei";
 import {
   useEffect,
@@ -48,6 +48,9 @@ function buildMonogramGeometry() {
 function Monogram({ progress }: { progress: ProgressRef }) {
   const group = useRef<THREE.Group>(null);
   const geometry = useMemo(buildMonogramGeometry, []);
+  const viewportWidth = useThree((state) => state.viewport.width);
+  // Fit the monogram to narrow (mobile) viewports so the type stays readable.
+  const scale = Math.min(2.15, viewportWidth * 0.62);
 
   useFrame((state, delta) => {
     const g = group.current;
@@ -72,7 +75,7 @@ function Monogram({ progress }: { progress: ProgressRef }) {
 
   return (
     <group ref={group}>
-      <mesh geometry={geometry} scale={2.15}>
+      <mesh geometry={geometry} scale={scale}>
         <meshPhysicalMaterial
           color="#15121c"
           metalness={0.9}
