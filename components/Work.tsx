@@ -6,34 +6,45 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const PROJECTS = [
+type Project = {
+  index: string;
+  name: string;
+  tag: string;
+  pitch: string;
+  href: string;
+  domain: string;
+  accent: string;
+  cover?: string;
+};
+
+const PROJECTS: Project[] = [
   {
     index: "01",
     name: "PlusConverter",
     tag: "P2P Marketplace",
-    pitch:
-      "Georgia's peer-to-peer exchange for PLUS points - 748,882 points moved to lari.",
+    pitch: "Georgia's P2P exchange for Bank of Georgia PLUS points.",
     href: "https://plusconverter.ge",
     domain: "plusconverter.ge",
     accent: "#8b30e0",
+    cover: "/work-plusconverter.webp",
   },
   {
     index: "02",
     name: "AImly",
     tag: "X Growth Manager",
-    pitch:
-      "An X manager built to outgrow the competition: trend radar, autopilot drafts, your approval.",
+    pitch: "An X manager built to outgrow competition and reach more people.",
     href: "https://tryaimly.com",
     domain: "tryaimly.com",
     accent: "#1fc77f",
+    cover: "/work-aimly.webp",
   },
   {
     index: "03",
     name: "AdLift",
     tag: "Facebook Ads Manager",
     pitch: "Facebook campaigns, creatives and results in one clean dashboard.",
-    href: "https://adlift.vercel.app",
-    domain: "adlift.vercel.app",
+    href: "https://adliftai.vercel.app",
+    domain: "adliftai.vercel.app",
     accent: "#3f8efc",
   },
 ];
@@ -63,10 +74,10 @@ export default function Work() {
   }, []);
 
   return (
-    <section ref={root} className="py-28 sm:py-40" aria-label="Selected work">
+    <section ref={root} className="py-28 sm:py-40" aria-label="Projects">
       <div className="mx-auto max-w-7xl px-6 sm:px-10">
         <div className="flex items-baseline justify-between">
-          <p className="eyebrow">Selected work</p>
+          <p className="eyebrow">Projects</p>
           <p className="font-mono text-sm text-stone">(03)</p>
         </div>
       </div>
@@ -81,6 +92,15 @@ export default function Work() {
             className="work-row border-b border-cream/10"
             style={{ "--row-accent": project.accent } as CSSProperties}
           >
+            <span
+              aria-hidden
+              className="work-bg"
+              style={{
+                backgroundImage: project.cover
+                  ? `url(${project.cover})`
+                  : `radial-gradient(ellipse at 82% 50%, ${project.accent}59, transparent 68%)`,
+              }}
+            />
             <div className="mx-auto grid max-w-7xl grid-cols-[auto_1fr_auto] items-center gap-x-6 sm:gap-x-12 px-6 py-10 sm:px-10 sm:py-14">
               <span className="work-dim work-swap font-mono text-sm text-stone self-start pt-2">
                 {project.index}

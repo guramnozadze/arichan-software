@@ -82,10 +82,13 @@ export default function Hero() {
     >
       <div className="hero-stage sticky top-0 h-screen overflow-hidden">
         <p className="hero-eyebrow eyebrow absolute top-16 sm:top-20 left-0 z-20 w-full px-6 text-center">
-          Guram Nozadze · Independent Software Studio
+          <span className="text-cream">Guram Nozadze</span> · Independent
+          Software Studio
         </p>
 
-        <div className="absolute inset-0 z-0 flex flex-col items-center justify-center select-none">
+        <MonogramCanvas progress={progress} className="absolute inset-0 z-0" />
+
+        <div className="absolute inset-0 z-10 flex flex-col items-center justify-center select-none">
           <h1
             className="display text-[clamp(5rem,17vw,16rem)] text-cream text-center"
             aria-label="Arichan Software"
@@ -105,8 +108,6 @@ export default function Hero() {
             ))}
           </h1>
         </div>
-
-        <MonogramCanvas progress={progress} className="absolute inset-0 z-10" />
 
         <p className="hero-sub absolute bottom-24 left-1/2 -translate-x-1/2 z-20 max-w-md px-6 text-center text-sm sm:text-base text-stone">
           I design, build and ship software products - marketplaces, AI tools

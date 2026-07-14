@@ -45,16 +45,16 @@ export default function Finale() {
             <span className="text-orchid">something real.</span>
           </h2>
           <div className="finale-reveal mt-14 flex flex-wrap items-center justify-center gap-4">
-            <a href="mailto:gukanozadze@gmail.com" className="btn btn-solid">
-              Start a project
-            </a>
             <a
               href="https://www.linkedin.com/in/guram-nozadze/"
               target="_blank"
               rel="noreferrer"
-              className="btn btn-ghost"
+              className="btn btn-linkedin"
             >
               LinkedIn ↗
+            </a>
+            <a href="mailto:gukanozadze@gmail.com" className="btn btn-ghost">
+              Start a project
             </a>
           </div>
         </div>

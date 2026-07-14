@@ -138,6 +138,24 @@ html.lenis body {
   display: block;
 }
 
+.work-bg {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  background-size: cover;
+  background-position: center right;
+  background-repeat: no-repeat;
+  opacity: 0.22;
+  -webkit-mask-image: linear-gradient(to right, transparent 12%, black 72%);
+  mask-image: linear-gradient(to right, transparent 12%, black 72%);
+  transition: opacity 0.5s cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+.work-row:hover .work-bg,
+.work-row:focus-visible .work-bg {
+  opacity: 0;
+}
+
 .work-row::before {
   content: "";
   position: absolute;
@@ -213,6 +231,17 @@ html.lenis body {
 
 .btn-solid:hover {
   background: var(--color-orchid);
+  transform: translateY(-2px);
+}
+
+.btn-linkedin {
+  background: #0a66c2;
+  color: #ffffff;
+  font-weight: 500;
+}
+
+.btn-linkedin:hover {
+  background: #0e76de;
   transform: translateY(-2px);
 }
 

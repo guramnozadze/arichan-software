@@ -48,9 +48,15 @@ function buildMonogramGeometry() {
 function Monogram({ progress }: { progress: ProgressRef }) {
   const group = useRef<THREE.Group>(null);
   const geometry = useMemo(buildMonogramGeometry, []);
-  const viewportWidth = useThree((state) => state.viewport.width);
-  // Fit the monogram to narrow (mobile) viewports so the type stays readable.
-  const scale = Math.min(2.15, viewportWidth * 0.62);
+  const viewport = useThree((state) => state.viewport);
+  // The monogram floats on the left so it never covers the headline;
+  // on narrow screens it rises above the type where the dark metal stays visible.
+  const isNarrow = viewport.width < viewport.height;
+  const scale = isNarrow
+    ? viewport.width * 0.5
+    : Math.min(1.9, viewport.width * 0.3);
+  const xOffset = -viewport.width * (isNarrow ? 0.2 : 0.26);
+  const yOffset = isNarrow ? viewport.height * 0.2 : 0;
 
   useFrame((state, delta) => {
     const g = group.current;
@@ -70,11 +76,11 @@ function Monogram({ progress }: { progress: ProgressRef }) {
       4,
       delta,
     );
-    g.position.y = Math.sin(state.clock.elapsedTime * 0.8) * 0.05;
+    g.position.y = yOffset + Math.sin(state.clock.elapsedTime * 0.8) * 0.05;
   });
 
   return (
-    <group ref={group}>
+    <group ref={group} position-x={xOffset}>
       <mesh geometry={geometry} scale={scale}>
         <meshPhysicalMaterial
           color="#15121c"
