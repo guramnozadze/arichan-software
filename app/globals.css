@@ -5,6 +5,7 @@
   --color-smoke: #17141d;
   --color-violet-core: #8b30e0;
   --color-orchid: #be7cff;
+  --color-lilac: #d4aaff;
   --color-cream: #f1ead8;
   --color-stone: #8e8779;
 
@@ -88,20 +89,6 @@ html.lenis body {
   color: var(--color-orchid);
 }
 
-/* Gradient lives on the letter spans: background-clip on the h1 breaks
-   once GSAP puts transforms on the animated descendants. */
-.hero-title .hero-letter {
-  background: linear-gradient(
-    172deg,
-    #d4aaff 0%,
-    var(--color-orchid) 38%,
-    var(--color-violet-core) 100%
-  );
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-
 .hero-letter {
   display: inline-block;
   will-change: transform;
@@ -142,12 +129,6 @@ html.lenis body {
   }
 }
 
-/* ---------- manifesto ---------- */
-
-.mani-word {
-  opacity: 0.15;
-}
-
 /* ---------- work rows ---------- */
 
 .work-row {
@@ -186,7 +167,7 @@ html.lenis body {
 }
 
 .work-tag {
-  color: var(--row-accent, var(--color-orchid));
+  color: var(--row-tag, var(--color-orchid));
 }
 
 .work-arrow {
@@ -195,7 +176,7 @@ html.lenis body {
 
 .work-row:hover .work-tag,
 .work-row:focus-visible .work-tag {
-  color: rgb(10 9 13 / 0.8);
+  color: var(--row-ink, var(--color-ink));
 }
 
 .work-row:hover::before,
@@ -209,12 +190,12 @@ html.lenis body {
 
 .work-row:hover .work-name,
 .work-row:focus-visible .work-name {
-  color: var(--color-ink);
+  color: var(--row-ink, var(--color-ink));
 }
 
 .work-row:hover .work-dim,
 .work-row:focus-visible .work-dim {
-  color: rgb(10 9 13 / 0.72);
+  color: var(--row-ink, var(--color-ink));
 }
 
 .work-row .work-arrow {
@@ -224,7 +205,7 @@ html.lenis body {
 .work-row:hover .work-arrow,
 .work-row:focus-visible .work-arrow {
   transform: translate(6px, -6px);
-  color: var(--color-ink);
+  color: var(--row-ink, var(--color-ink));
 }
 
 /* ---------- buttons ---------- */
@@ -241,25 +222,15 @@ html.lenis body {
   transition: background-color 0.3s, color 0.3s, border-color 0.3s, transform 0.3s;
 }
 
+/* Orchid, not violet-core: ink text on #8b30e0 is only ~3.4:1 at this size. */
 .btn-solid {
-  background: var(--color-violet-core);
+  background: var(--color-orchid);
   color: var(--color-ink);
   font-weight: 500;
 }
 
 .btn-solid:hover {
-  background: var(--color-orchid);
-  transform: translateY(-2px);
-}
-
-.btn-linkedin {
-  background: #0a66c2;
-  color: #ffffff;
-  font-weight: 500;
-}
-
-.btn-linkedin:hover {
-  background: #0e76de;
+  background: var(--color-lilac);
   transform: translateY(-2px);
 }
 
@@ -281,6 +252,12 @@ html.lenis body {
     animation: none;
   }
 
+  /* The curtain's -100vh pull-up only makes sense over a 400vh pinned hero;
+     with the hero collapsed to one screen it would swallow it entirely. */
+  .curtain {
+    margin-top: 0;
+  }
+
   .mani-word {
     opacity: 1 !important;
   }
@@ -292,7 +269,7 @@ html.lenis body {
   .mani-stage {
     position: relative !important;
     height: auto !important;
-    padding: 8rem 0;
+    padding-block: 8rem;
   }
 
   .hero-track {

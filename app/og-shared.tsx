@@ -43,7 +43,8 @@ export async function renderOgImage() {
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-          <img src={monogramSrc} width={52} height={52} />
+          {/* eslint-disable-next-line @next/next/no-img-element -- satori markup, next/image cannot render inside ImageResponse */}
+          <img src={monogramSrc} alt="" width={52} height={52} />
           <span
             style={{
               fontFamily: "IBM Plex Mono",

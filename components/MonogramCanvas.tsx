@@ -47,7 +47,7 @@ function buildMonogramGeometry() {
 
 function Monogram({ progress }: { progress: ProgressRef }) {
   const group = useRef<THREE.Group>(null);
-  const geometry = useMemo(buildMonogramGeometry, []);
+  const geometry = useMemo(() => buildMonogramGeometry(), []);
   const viewport = useThree((state) => state.viewport);
   // The monogram floats on the left so it never covers the headline;
   // on narrow screens it rises above the type where the dark metal stays visible.
@@ -95,17 +95,19 @@ function Monogram({ progress }: { progress: ProgressRef }) {
   );
 }
 
+// Generated at module scope: render functions must stay pure (react-hooks/purity).
+const DUST_POSITIONS = (() => {
+  const arr = new Float32Array(350 * 3);
+  for (let i = 0; i < arr.length; i += 3) {
+    arr[i] = (Math.random() - 0.5) * 9;
+    arr[i + 1] = (Math.random() - 0.5) * 5;
+    arr[i + 2] = (Math.random() - 0.5) * 4;
+  }
+  return arr;
+})();
+
 function Dust() {
   const points = useRef<THREE.Points>(null);
-  const positions = useMemo(() => {
-    const arr = new Float32Array(350 * 3);
-    for (let i = 0; i < arr.length; i += 3) {
-      arr[i] = (Math.random() - 0.5) * 9;
-      arr[i + 1] = (Math.random() - 0.5) * 5;
-      arr[i + 2] = (Math.random() - 0.5) * 4;
-    }
-    return arr;
-  }, []);
 
   useFrame((state) => {
     if (points.current) {
@@ -116,7 +118,7 @@ function Dust() {
   return (
     <points ref={points}>
       <bufferGeometry>
-        <bufferAttribute attach="attributes-position" args={[positions, 3]} />
+        <bufferAttribute attach="attributes-position" args={[DUST_POSITIONS, 3]} />
       </bufferGeometry>
       <pointsMaterial
         size={0.02}

@@ -14,6 +14,10 @@ type Project = {
   href: string;
   domain: string;
   accent: string;
+  /** Resting tag color when the accent itself is below 4.5:1 on the ink bg. */
+  tagTint?: string;
+  /** Text color over the hover fill when ink is below 4.5:1 on the accent. */
+  inkOnAccent?: string;
   cover?: string;
 };
 
@@ -26,6 +30,8 @@ const PROJECTS: Project[] = [
     href: "https://plusconverter.ge",
     domain: "plusconverter.ge",
     accent: "#8b30e0",
+    tagTint: "#be7cff",
+    inkOnAccent: "#f1ead8",
     cover: "/work-plusconverter.webp",
   },
   {
@@ -77,7 +83,7 @@ export default function Work() {
     <section ref={root} className="py-28 sm:py-40" aria-label="Projects">
       <div className="mx-auto max-w-7xl px-6 sm:px-10">
         <div className="flex items-baseline justify-between">
-          <p className="eyebrow">Projects</p>
+          <h2 className="display text-2xl sm:text-3xl text-cream">Projects</h2>
           <p className="font-mono text-sm text-stone">(03)</p>
         </div>
       </div>
@@ -90,7 +96,13 @@ export default function Work() {
             target="_blank"
             rel="noreferrer"
             className="work-row border-b border-cream/10"
-            style={{ "--row-accent": project.accent } as CSSProperties}
+            style={
+              {
+                "--row-accent": project.accent,
+                "--row-tag": project.tagTint ?? project.accent,
+                "--row-ink": project.inkOnAccent ?? "var(--color-ink)",
+              } as CSSProperties
+            }
           >
             <span
               aria-hidden

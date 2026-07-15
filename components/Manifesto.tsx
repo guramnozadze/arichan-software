@@ -43,7 +43,8 @@ export default function Manifesto() {
     if (reduced) return;
 
     const ctx = gsap.context(() => {
-      gsap.to(".mani-word", {
+      // fromTo, not CSS-dimmed + to: without JS the words must stay readable.
+      gsap.fromTo(".mani-word", { opacity: 0.15 }, {
         opacity: 1,
         stagger: 0.03,
         duration: 0.1,
@@ -67,7 +68,6 @@ export default function Manifesto() {
       aria-label="What I do"
     >
       <div className="mani-stage sticky top-0 flex h-screen flex-col justify-center px-6 sm:px-12 lg:px-20">
-        <p className="eyebrow absolute top-24">What I do</p>
         <p className="max-w-5xl text-[clamp(1.75rem,5vw,4rem)] font-semibold leading-[1.15] tracking-tight text-cream">
           {SENTENCE.map((word, i) => (
             <span

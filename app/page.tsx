@@ -13,7 +13,7 @@ export default function Home() {
       <main>
         <Hero />
         {/* Curtain: slides up over the pinned hero as it recedes */}
-        <div className="relative z-10 -mt-[100vh] bg-ink">
+        <div className="curtain relative z-10 -mt-[100vh] bg-ink">
           <Marquee />
           <Manifesto />
           <Work />

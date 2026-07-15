@@ -25,6 +25,7 @@ export default async function AppleIcon() {
       >
         <img
           src={`data:image/png;base64,${monogram}`}
+          alt=""
           width={128}
           height={128}
         />
