@@ -94,6 +94,20 @@ html.lenis body {
   will-change: transform;
 }
 
+/* Keep the animated hero elements invisible on first paint (server-rendered
+   HTML + the gap before GSAP mounts) so the entrance animation never flashes
+   the final state first. JS reveals them right as it sets the tween's start
+   values. Scoped to no-preference so reduced-motion users, whom the script
+   never touches, see the final state immediately. */
+@media (prefers-reduced-motion: no-preference) {
+  .hero-letter,
+  .hero-eyebrow,
+  .hero-sub,
+  .hero-cue {
+    visibility: hidden;
+  }
+}
+
 .hero-cue-line {
   display: block;
   width: 1px;

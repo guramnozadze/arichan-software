@@ -31,6 +31,10 @@ export default function Hero() {
 
       if (reduced) return;
 
+      gsap.set(".hero-letter, .hero-eyebrow, .hero-sub, .hero-cue", {
+        visibility: "visible",
+      });
+
       gsap.from(".hero-letter", {
         yPercent: 112,
         rotate: 6,
