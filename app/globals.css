@@ -272,18 +272,35 @@ html.lenis body {
     margin-top: 0;
   }
 
-  .mani-word {
-    opacity: 1 !important;
-  }
-
   .mani-track {
     height: auto !important;
   }
 
   .mani-stage {
     position: relative !important;
+    display: flex !important;
+    flex-direction: column !important;
     height: auto !important;
     padding-block: 8rem;
+  }
+
+  .mani-rail {
+    display: none !important;
+  }
+
+  .mani-claims {
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  .mani-claim {
+    position: static !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+
+  .mani-claim-label {
+    display: block !important;
   }
 
   .hero-track {
