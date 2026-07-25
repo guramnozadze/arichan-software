@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Anton, IBM_Plex_Mono, Instrument_Sans } from "next/font/google";
+import { Anton, Familjen_Grotesk, Fragment_Mono } from "next/font/google";
 import "./globals.css";
 
 const anton = Anton({
@@ -9,14 +9,14 @@ const anton = Anton({
   display: "swap",
 });
 
-const instrument = Instrument_Sans({
+const familjen = Familjen_Grotesk({
   subsets: ["latin"],
   variable: "--font-instrument",
   display: "swap",
 });
 
-const plexMono = IBM_Plex_Mono({
-  weight: ["400", "500"],
+const fragmentMono = Fragment_Mono({
+  weight: "400",
   subsets: ["latin"],
   variable: "--font-plex-mono",
   display: "swap",
@@ -61,7 +61,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${anton.variable} ${instrument.variable} ${plexMono.variable} h-full antialiased`}
+      className={`${anton.variable} ${familjen.variable} ${fragmentMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">{children}</body>
     </html>

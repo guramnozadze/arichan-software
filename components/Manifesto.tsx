@@ -11,9 +11,15 @@ gsap.registerPlugin(ScrollTrigger);
 // particles), Engineering is mechanical (linear typing, no easing curve).
 // Each plays once when scrolled into view rather than scrubbing with the
 // scrollbar, so it has real kinetic energy instead of feeling scroll-locked.
+// A faint oversized word drifts behind each claim on a slow parallax scrub -
+// atmosphere, not a numbered-eyebrow scaffold.
 
-const SHIP_WORDS = ["I", "ship", "products,"];
-const SHIP_TRAIL = "not slide decks.";
+const SHIP_WORDS = [
+  { text: "Fast", hl: false },
+  { text: "ships.", hl: false },
+  { text: "Serious", hl: true },
+  { text: "revenue.", hl: true },
+];
 
 function ShipClaim() {
   const root = useRef<HTMLDivElement>(null);
@@ -36,7 +42,7 @@ function ShipClaim() {
         rotate: () => gsap.utils.random(-9, 9),
       });
       gsap.set(rings, { opacity: 0, scale: 0.4 });
-      gsap.set(".ship-trail, .ship-stamp", { opacity: 0, y: 16 });
+      gsap.set(".ship-stamp", { opacity: 0, y: 16 });
 
       const tl = gsap.timeline({
         scrollTrigger: { trigger: root.current, start: "top 75%", once: true },
@@ -68,12 +74,25 @@ function ShipClaim() {
           );
       });
 
-      tl.to(".ship-trail", { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" })
-        .to(
-          ".ship-stamp",
-          { opacity: 1, y: 0, rotate: -4, duration: 0.4, ease: "back.out(2)" },
-          "-=0.15",
-        );
+      tl.to(".ship-stamp", {
+        opacity: 1,
+        y: 0,
+        rotate: -4,
+        duration: 0.4,
+        ease: "back.out(2)",
+        stagger: 0.08,
+      });
+
+      gsap.to(".ship-bg-word", {
+        yPercent: -16,
+        ease: "none",
+        scrollTrigger: {
+          trigger: root.current,
+          start: "top bottom",
+          end: "bottom top",
+          scrub: true,
+        },
+      });
     }, root);
 
     return () => ctx.revert();
@@ -82,31 +101,38 @@ function ShipClaim() {
   return (
     <div
       ref={root}
-      className="flex flex-col justify-center px-6 py-20 sm:px-12 sm:py-28 md:min-h-screen md:py-0 lg:px-20"
+      className="relative isolate flex flex-col justify-center overflow-hidden px-6 py-20 sm:px-12 sm:py-28 md:min-h-screen md:py-0 lg:px-20"
     >
-      <p className="font-mono text-xs tracking-[0.14em] text-stone uppercase">
-        01 · Ship
-      </p>
+      <span
+        aria-hidden
+        className="ship-bg-word claim-bg-word display absolute -right-6 top-8 text-[clamp(8rem,24vw,20rem)] sm:top-12"
+      >
+        SHIP
+      </span>
       <p
         ref={heading}
-        className="display mt-4 text-[clamp(2.75rem,8vw,7rem)] leading-[1.05] text-cream"
+        className="display text-[clamp(2.75rem,8vw,7rem)] leading-[1.05]"
       >
         {SHIP_WORDS.map((w, i) => (
           <span
             key={i}
-            className="ship-word relative mr-[0.28em] inline-block"
+            className={`ship-word relative mr-[0.28em] inline-block ${
+              w.hl ? "text-orchid" : "text-cream"
+            }`}
           >
-            {w}
+            {w.text}
             <span
               aria-hidden
               className="ship-impact-ring pointer-events-none absolute top-full left-1/2 h-[0.14em] w-[0.14em] -translate-x-1/2 rounded-full border-2 border-orchid opacity-0"
             />
           </span>
         ))}
-        <span className="ship-trail text-stone">{SHIP_TRAIL}</span>
       </p>
       <p className="ship-stamp mt-8 inline-flex w-fit items-center gap-2 border border-orchid/50 px-4 py-2 font-mono text-xs tracking-[0.14em] text-orchid uppercase">
         <span aria-hidden>✓</span> 3 products shipped in 4 months
+      </p>
+      <p className="ship-stamp mt-3 font-mono text-xs tracking-[0.1em] text-stone">
+        Ed Tech · HR Tech · Back-Office ERP · Inventory Management
       </p>
     </div>
   );
@@ -162,6 +188,17 @@ function MarketplacesClaim() {
           "-=0.35",
         )
         .to(".mkt-dot", { opacity: 1, duration: 0.3, stagger: 0.15 }, "-=1.2");
+
+      gsap.to(".mkt-bg-word", {
+        yPercent: -16,
+        ease: "none",
+        scrollTrigger: {
+          trigger: root.current,
+          start: "top bottom",
+          end: "bottom top",
+          scrub: true,
+        },
+      });
     }, root);
 
     return () => ctx.revert();
@@ -170,12 +207,15 @@ function MarketplacesClaim() {
   return (
     <div
       ref={root}
-      className="flex flex-col justify-center border-t border-cream/10 px-6 py-20 sm:px-12 sm:py-28 md:min-h-screen md:py-0 lg:px-20"
+      className="relative isolate flex flex-col justify-center overflow-hidden border-t border-cream/10 px-6 py-20 sm:px-12 sm:py-28 md:min-h-screen md:py-0 lg:px-20"
     >
-      <p className="font-mono text-xs tracking-[0.14em] text-stone uppercase">
-        02 · Marketplaces
-      </p>
-      <p className="mkt-heading display mt-4 max-w-4xl text-[clamp(2.75rem,7vw,6rem)] leading-[1.05] text-cream text-balance">
+      <span
+        aria-hidden
+        className="mkt-bg-word claim-bg-word display absolute -left-6 bottom-4 text-[clamp(8rem,24vw,20rem)]"
+      >
+        MARKETS
+      </span>
+      <p className="mkt-heading display max-w-4xl text-[clamp(2.75rem,7vw,6rem)] leading-[1.05] text-cream text-balance">
         Marketplaces that move{" "}
         <span className="text-orchid">real money.</span>
       </p>
@@ -231,6 +271,17 @@ function EngineeringClaim() {
         onStart: () => setRevealed(0),
         onUpdate: () => setRevealed(Math.floor(proxy.n)),
       });
+
+      gsap.to(".eng-bg-word", {
+        yPercent: -16,
+        ease: "none",
+        scrollTrigger: {
+          trigger: root.current,
+          start: "top bottom",
+          end: "bottom top",
+          scrub: true,
+        },
+      });
     }, root);
 
     return () => ctx.revert();
@@ -242,12 +293,15 @@ function EngineeringClaim() {
   return (
     <div
       ref={root}
-      className="flex flex-col justify-center border-t border-cream/10 px-6 py-20 sm:px-12 sm:py-28 md:min-h-screen md:py-0 lg:px-20"
+      className="relative isolate flex flex-col justify-center overflow-hidden border-t border-cream/10 px-6 py-20 sm:px-12 sm:py-28 md:min-h-screen md:py-0 lg:px-20"
     >
-      <p className="font-mono text-xs tracking-[0.14em] text-stone uppercase">
-        03 · Engineering
-      </p>
-      <p className="mt-6 font-mono text-[clamp(1.4rem,3.6vw,2.75rem)] leading-[1.4] text-cream">
+      <span
+        aria-hidden
+        className="eng-bg-word claim-bg-word absolute right-0 bottom-0 font-mono text-[clamp(9rem,28vw,24rem)]"
+      >
+        {">_"}
+      </span>
+      <p className="font-mono text-[clamp(1.4rem,3.6vw,2.75rem)] leading-[1.4] text-cream">
         <span aria-hidden className="text-orchid">
           ${" "}
         </span>

@@ -126,6 +126,17 @@ html.lenis body {
 
 /* ---------- manifesto ---------- */
 
+.claim-bg-word {
+  position: absolute;
+  z-index: -1;
+  line-height: 0.8;
+  color: var(--color-cream);
+  opacity: 0.05;
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+}
+
 .eng-cursor {
   display: inline-block;
   width: 0.5em;
