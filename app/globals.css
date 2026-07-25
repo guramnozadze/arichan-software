@@ -124,6 +124,22 @@ html.lenis body {
   100% { transform: scaleY(0); transform-origin: bottom; }
 }
 
+/* ---------- manifesto ---------- */
+
+.eng-cursor {
+  display: inline-block;
+  width: 0.5em;
+  height: 1em;
+  margin-left: 0.05em;
+  background: var(--color-orchid);
+  vertical-align: text-bottom;
+  animation: eng-blink 0.9s steps(1) infinite;
+}
+
+@keyframes eng-blink {
+  50% { opacity: 0; }
+}
+
 /* ---------- marquee ---------- */
 
 .marquee {
@@ -272,35 +288,9 @@ html.lenis body {
     margin-top: 0;
   }
 
-  .mani-track {
-    height: auto !important;
-  }
-
-  .mani-stage {
-    position: relative !important;
-    display: flex !important;
-    flex-direction: column !important;
-    height: auto !important;
-    padding-block: 8rem;
-  }
-
-  .mani-rail {
-    display: none !important;
-  }
-
-  .mani-claims {
-    display: flex !important;
-    flex-direction: column !important;
-  }
-
-  .mani-claim {
-    position: static !important;
-    opacity: 1 !important;
-    visibility: visible !important;
-  }
-
-  .mani-claim-label {
-    display: block !important;
+  .eng-cursor {
+    animation: none;
+    opacity: 1;
   }
 
   .hero-track {

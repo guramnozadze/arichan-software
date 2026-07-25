@@ -1,52 +1,23 @@
 "use client";
 
-import { useLayoutEffect, useRef } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
-type Claim = {
-  label: string;
-  lead: string;
-  trail: string;
-  trailTone: "muted" | "accent";
-  proof?: string;
-};
+// Three claims, three unrelated motion languages: Ship lands with physical
+// weight (overshoot + impact), Marketplaces flows (counting + looping
+// particles), Engineering is mechanical (linear typing, no easing curve).
+// Each plays once when scrolled into view rather than scrubbing with the
+// scrollbar, so it has real kinetic energy instead of feeling scroll-locked.
 
-// A pinned ledger: the rail tracks which claim is active while the right
-// panel crossfades between them as the reader scrolls.
-const CLAIMS: Claim[] = [
-  {
-    label: "Ship",
-    lead: "I ship products,",
-    trail: " not slide decks.",
-    trailTone: "muted",
-    proof: "3 products live",
-  },
-  {
-    label: "Marketplaces",
-    lead: "Marketplaces that move",
-    trail: " real money.",
-    trailTone: "accent",
-    proof: "748,882 PLUS points moved · 95 P2P trades",
-  },
-  {
-    label: "Compliance SaaS",
-    lead: "B2B compliance SaaS that keeps customers",
-    trail: " subscribed.",
-    trailTone: "accent",
-  },
-  {
-    label: "Engineering",
-    lead: "Senior engineering, shipped",
-    trail: " without drama.",
-    trailTone: "muted",
-  },
-];
+const SHIP_WORDS = ["I", "ship", "products,"];
+const SHIP_TRAIL = "not slide decks.";
 
-export default function Manifesto() {
-  const root = useRef<HTMLElement>(null);
+function ShipClaim() {
+  const root = useRef<HTMLDivElement>(null);
+  const heading = useRef<HTMLParagraphElement>(null);
 
   useLayoutEffect(() => {
     const reduced = window.matchMedia(
@@ -55,141 +26,245 @@ export default function Manifesto() {
     if (reduced) return;
 
     const ctx = gsap.context(() => {
-      // The pinned crossfade only makes sense once there's room for a
-      // sticky rail beside the claim panel; below md it's a static list.
-      ScrollTrigger.matchMedia({
-        "(min-width: 768px)": () => {
-          const claims = gsap.utils.toArray<HTMLElement>(".mani-claim");
-          const rails = gsap.utils.toArray<HTMLElement>(".mani-rail-item");
-          const markers = gsap.utils.toArray<HTMLElement>(
-            ".mani-rail-marker",
-          );
+      const words = gsap.utils.toArray<HTMLElement>(".ship-word");
+      const rings = gsap.utils.toArray<HTMLElement>(".ship-impact-ring");
 
-          gsap.set(claims.slice(1), { y: 28 });
-
-          const tl = gsap.timeline({
-            scrollTrigger: {
-              trigger: root.current,
-              start: "top top",
-              end: "bottom bottom",
-              scrub: true,
-            },
-          });
-
-          // Exit must fully finish before enter starts: these are different
-          // sentences, not a photo, so overlapping opacity reads as an
-          // illegible double-exposure rather than a dissolve.
-          const EXIT_DUR = 0.05;
-          const ENTER_DUR = 0.06;
-
-          claims.forEach((claim, i) => {
-            if (i === 0) return;
-            const at = i / claims.length;
-            tl.to(
-              claims[i - 1],
-              { autoAlpha: 0, y: -24, duration: EXIT_DUR, ease: "power1.in" },
-              at - EXIT_DUR,
-            )
-              .to(
-                claim,
-                {
-                  autoAlpha: 1,
-                  y: 0,
-                  duration: ENTER_DUR,
-                  ease: "power2.out",
-                },
-                at,
-              )
-              .to(
-                rails[i - 1],
-                { color: "var(--color-stone)", duration: 0.1 },
-                at - EXIT_DUR,
-              )
-              .to(markers[i - 1], { opacity: 0, duration: 0.1 }, at - EXIT_DUR)
-              .to(
-                rails[i],
-                { color: "var(--color-cream)", duration: 0.1 },
-                at,
-              )
-              .to(markers[i], { opacity: 1, duration: 0.1 }, at);
-          });
-
-          // Position params above are fractions of scroll progress, but GSAP
-          // timeline positions are absolute seconds; normalize so 1 second
-          // of timeline time equals 100% scroll progress through the pin.
-          tl.duration(1);
-
-          return () => {};
-        },
+      gsap.set(words, {
+        y: -140,
+        opacity: 0,
+        scale: 1.15,
+        rotate: () => gsap.utils.random(-9, 9),
       });
+      gsap.set(rings, { opacity: 0, scale: 0.4 });
+      gsap.set(".ship-trail, .ship-stamp", { opacity: 0, y: 16 });
+
+      const tl = gsap.timeline({
+        scrollTrigger: { trigger: root.current, start: "top 75%", once: true },
+      });
+
+      words.forEach((word, i) => {
+        const at = i * 0.14;
+        tl.to(
+          word,
+          {
+            y: 0,
+            opacity: 1,
+            scale: 1,
+            rotate: 0,
+            duration: 0.65,
+            ease: "back.out(1.9)",
+          },
+          at,
+        )
+          .to(
+            rings[i],
+            { scale: 2.3, opacity: 0.9, duration: 0.5, ease: "power2.out" },
+            at + 0.32,
+          )
+          .to(
+            heading.current,
+            { x: 2.5, duration: 0.035, repeat: 3, yoyo: true, ease: "none" },
+            at + 0.32,
+          );
+      });
+
+      tl.to(".ship-trail", { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" })
+        .to(
+          ".ship-stamp",
+          { opacity: 1, y: 0, rotate: -4, duration: 0.4, ease: "back.out(2)" },
+          "-=0.15",
+        );
     }, root);
 
     return () => ctx.revert();
   }, []);
 
   return (
-    <section
+    <div
       ref={root}
-      className="mani-track relative bg-smoke md:h-[400vh]"
-      aria-label="What I do"
+      className="flex flex-col justify-center px-6 py-20 sm:px-12 sm:py-28 md:min-h-screen md:py-0 lg:px-20"
     >
-      <div className="mani-stage flex flex-col gap-10 px-6 py-24 sm:px-12 md:sticky md:top-0 md:grid md:h-screen md:grid-cols-[auto_1fr] md:items-center md:gap-16 md:px-12 md:py-0 lg:px-20">
-        <ol className="mani-rail hidden font-mono text-sm tracking-[0.14em] text-stone uppercase md:flex md:flex-col md:gap-5">
-          {CLAIMS.map((claim, i) => (
-            <li
-              key={claim.label}
-              className={`mani-rail-item flex items-center gap-3 ${
-                i === 0 ? "text-cream" : "text-stone"
-              }`}
-            >
-              <span
-                className={`mani-rail-marker text-orchid ${
-                  i === 0 ? "opacity-100" : "opacity-0"
-                }`}
-                aria-hidden
-              >
-                ›
-              </span>
-              <span className="text-stone/70">
-                {String(i + 1).padStart(2, "0")}
-              </span>
-              <span>{claim.label}</span>
-            </li>
-          ))}
-        </ol>
+      <p className="font-mono text-xs tracking-[0.14em] text-stone uppercase">
+        01 · Ship
+      </p>
+      <p
+        ref={heading}
+        className="display mt-4 text-[clamp(2.75rem,8vw,7rem)] leading-[1.05] text-cream"
+      >
+        {SHIP_WORDS.map((w, i) => (
+          <span
+            key={i}
+            className="ship-word relative mr-[0.28em] inline-block"
+          >
+            {w}
+            <span
+              aria-hidden
+              className="ship-impact-ring pointer-events-none absolute top-full left-1/2 h-[0.14em] w-[0.14em] -translate-x-1/2 rounded-full border-2 border-orchid opacity-0"
+            />
+          </span>
+        ))}
+        <span className="ship-trail text-stone">{SHIP_TRAIL}</span>
+      </p>
+      <p className="ship-stamp mt-8 inline-flex w-fit items-center gap-2 border border-orchid/50 px-4 py-2 font-mono text-xs tracking-[0.14em] text-orchid uppercase">
+        <span aria-hidden>✓</span> 3 products shipped in 4 months
+      </p>
+    </div>
+  );
+}
 
-        <div className="mani-claims relative flex flex-col gap-16 md:block md:min-h-[16rem]">
-          {CLAIMS.map((claim, i) => (
-            <div
-              key={claim.label}
-              className={`mani-claim flex flex-col justify-center md:absolute md:inset-0 ${
-                i === 0 ? "" : "md:opacity-0 md:invisible"
-              }`}
-            >
-              <p className="mani-claim-label mb-3 font-mono text-xs tracking-[0.14em] text-stone uppercase md:hidden">
-                {String(i + 1).padStart(2, "0")} · {claim.label}
-              </p>
-              <p className="display text-balance text-[clamp(1.9rem,5vw,4.25rem)] leading-[1.1] text-cream">
-                {claim.lead}
-                <span
-                  className={
-                    claim.trailTone === "accent"
-                      ? "text-orchid"
-                      : "text-stone"
-                  }
-                >
-                  {claim.trail}
-                </span>
-              </p>
-              {claim.proof && (
-                <p className="mt-6 font-mono text-sm text-stone">
-                  <span className="text-violet-core">✦</span> {claim.proof}
-                </p>
-              )}
-            </div>
-          ))}
+function MarketplacesClaim() {
+  const root = useRef<HTMLDivElement>(null);
+  const [count, setCount] = useState(748882);
+
+  useLayoutEffect(() => {
+    const reduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    if (reduced) return;
+
+    const ctx = gsap.context(() => {
+      gsap.set(".mkt-heading", { opacity: 0, y: 28 });
+      gsap.set(".mkt-dot", { opacity: 0 });
+
+      const counter = { value: 0 };
+
+      const tl = gsap.timeline({
+        scrollTrigger: { trigger: root.current, start: "top 75%", once: true },
+        onComplete: () => {
+          // Ambient loop: only start once the entrance has fully played,
+          // so the dots don't cycle invisibly while off-screen.
+          gsap.utils.toArray<HTMLElement>(".mkt-dot").forEach((dot, i) => {
+            gsap.fromTo(
+              dot,
+              { x: 0 },
+              {
+                x: "9rem",
+                duration: 1.8,
+                repeat: -1,
+                delay: i * 0.5,
+                ease: "power1.inOut",
+              },
+            );
+          });
+        },
+      });
+
+      tl.to(".mkt-heading", { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" })
+        .to(
+          counter,
+          {
+            value: 748882,
+            duration: 1.6,
+            ease: "power2.out",
+            onStart: () => setCount(0),
+            onUpdate: () => setCount(Math.round(counter.value)),
+          },
+          "-=0.35",
+        )
+        .to(".mkt-dot", { opacity: 1, duration: 0.3, stagger: 0.15 }, "-=1.2");
+    }, root);
+
+    return () => ctx.revert();
+  }, []);
+
+  return (
+    <div
+      ref={root}
+      className="flex flex-col justify-center border-t border-cream/10 px-6 py-20 sm:px-12 sm:py-28 md:min-h-screen md:py-0 lg:px-20"
+    >
+      <p className="font-mono text-xs tracking-[0.14em] text-stone uppercase">
+        02 · Marketplaces
+      </p>
+      <p className="mkt-heading display mt-4 max-w-4xl text-[clamp(2.75rem,7vw,6rem)] leading-[1.05] text-cream text-balance">
+        Marketplaces that move{" "}
+        <span className="text-orchid">real money.</span>
+      </p>
+
+      <div className="mt-10 flex flex-wrap items-end gap-x-10 gap-y-6">
+        <p className="display text-[clamp(2.5rem,6vw,4.5rem)] tabular-nums text-orchid">
+          {count.toLocaleString()}
+        </p>
+        <div className="flex flex-col gap-2 pb-2">
+          <p className="font-mono text-xs tracking-[0.14em] text-stone uppercase">
+            PLUS points moved
+          </p>
+          <div className="relative h-4 w-36">
+            <span className="absolute top-1/2 left-0 h-px w-full -translate-y-1/2 bg-cream/15" />
+            <span
+              aria-hidden
+              className="mkt-dot absolute top-1/2 left-0 h-1.5 w-1.5 -translate-y-1/2 rounded-full bg-orchid opacity-0"
+            />
+            <span
+              aria-hidden
+              className="mkt-dot absolute top-1/2 left-0 h-1.5 w-1.5 -translate-y-1/2 rounded-full bg-violet-core opacity-0"
+            />
+          </div>
+          <p className="font-mono text-xs text-stone">95 P2P trades</p>
         </div>
       </div>
+    </div>
+  );
+}
+
+const ENG_LEAD = "Senior engineering, shipped";
+const ENG_TRAIL = " without drama.";
+const ENG_FULL_LEN = ENG_LEAD.length + ENG_TRAIL.length;
+
+function EngineeringClaim() {
+  const root = useRef<HTMLDivElement>(null);
+  const [revealed, setRevealed] = useState(ENG_FULL_LEN);
+
+  useLayoutEffect(() => {
+    const reduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    if (reduced) return;
+
+    const ctx = gsap.context(() => {
+      const proxy = { n: 0 };
+      gsap.timeline({
+        scrollTrigger: { trigger: root.current, start: "top 75%", once: true },
+      }).to(proxy, {
+        n: ENG_FULL_LEN,
+        duration: 1.3,
+        ease: "none",
+        onStart: () => setRevealed(0),
+        onUpdate: () => setRevealed(Math.floor(proxy.n)),
+      });
+    }, root);
+
+    return () => ctx.revert();
+  }, []);
+
+  const leadShown = ENG_LEAD.slice(0, Math.min(revealed, ENG_LEAD.length));
+  const trailShown = ENG_TRAIL.slice(0, Math.max(0, revealed - ENG_LEAD.length));
+
+  return (
+    <div
+      ref={root}
+      className="flex flex-col justify-center border-t border-cream/10 px-6 py-20 sm:px-12 sm:py-28 md:min-h-screen md:py-0 lg:px-20"
+    >
+      <p className="font-mono text-xs tracking-[0.14em] text-stone uppercase">
+        03 · Engineering
+      </p>
+      <p className="mt-6 font-mono text-[clamp(1.4rem,3.6vw,2.75rem)] leading-[1.4] text-cream">
+        <span aria-hidden className="text-orchid">
+          ${" "}
+        </span>
+        {leadShown}
+        <span className="text-stone">{trailShown}</span>
+        <span aria-hidden className="eng-cursor" />
+      </p>
+    </div>
+  );
+}
+
+export default function Manifesto() {
+  return (
+    <section className="relative bg-smoke" aria-label="What I do">
+      <ShipClaim />
+      <MarketplacesClaim />
+      <EngineeringClaim />
     </section>
   );
 }
