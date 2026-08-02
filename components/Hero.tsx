@@ -85,10 +85,12 @@ export default function Hero() {
       aria-label="Arichan Software"
     >
       <div className="hero-stage sticky top-0 h-screen overflow-hidden">
-        <p className="hero-eyebrow eyebrow absolute top-16 sm:top-20 left-0 z-20 w-full px-6 text-center">
-          <span className="text-cream">Guram Nozadze</span> · Independent
-          Software Studio
-        </p>
+        <div className="hero-eyebrow absolute top-16 sm:top-20 left-0 z-20 w-full px-6 text-center">
+          <p className="font-sans text-xl sm:text-2xl font-medium tracking-tight text-cream">
+            Guram Nozadze
+          </p>
+          <p className="eyebrow mt-2">Full-Stack Engineer</p>
+        </div>
 
         <MonogramCanvas progress={progress} className="absolute inset-0 z-0" />
 
@@ -114,8 +116,7 @@ export default function Hero() {
         </div>
 
         <p className="hero-sub absolute bottom-24 left-1/2 -translate-x-1/2 z-20 max-w-md px-6 text-center text-sm sm:text-base text-stone">
-          I design, build and ship software products - marketplaces, AI tools
-          and SaaS.
+          Software, designed and built without compromise.
         </p>
 
         <div className="hero-cue absolute bottom-6 left-1/2 -translate-x-1/2 z-20 text-center font-mono text-[0.625rem] tracking-[0.3em] uppercase text-stone">

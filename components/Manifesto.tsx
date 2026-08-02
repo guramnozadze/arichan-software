@@ -129,7 +129,7 @@ function ShipClaim() {
         ))}
       </p>
       <p className="ship-stamp mt-8 inline-flex w-fit items-center gap-2 border border-orchid/50 px-4 py-2 font-mono text-xs tracking-[0.14em] text-orchid uppercase">
-        <span aria-hidden>✓</span> 3 products shipped in 4 months
+        <span aria-hidden>✓</span> Every product, live in production.
       </p>
       <p className="ship-stamp mt-3 font-mono text-xs tracking-[0.1em] text-stone">
         Ed Tech · HR Tech · Back-Office ERP · Inventory Management
